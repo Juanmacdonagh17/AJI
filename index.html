@@ -3,34 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <title>Asociacion de Jovenes Investigadores</title>
-  <link rel="icon" href="bitmap.png" type="image/png">
+  <link rel="icon" href="logo_loli.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 
   <style>
 
-        :root {
+      :root {
       --green: #327e45;
       --orange: #ef770d;
     }
 
     body {
-      font-family: 'Montserrat', sans-serif;      
+      font-family: 'Montserrat', sans-serif;
       margin: 0;
       padding: 0;
-      text-align: center;  /* Center text elements in the body */
+      text-align: center;
       background-color: #F7E7CE;
     }
 
     .container {
       width: 80%;
-      max-width: 800px;
+      max-width: 1000px;
       margin: 50px auto;
     }
 
-    /* Center the logo */
     .logo {
-      max-width: 200px;
+      max-width: 250px;
       display: block;
       margin: 0 auto 20px auto;
     }
@@ -39,30 +38,46 @@
       color: #000000;
       margin-bottom: 40px;
     }
-    /* cambio el flex por un grid */
-    .photos{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);  /* 4 equal tracks */
-      gap:40px;
+
+    .section-title {
+      font-size: 1.9rem;
+      margin: 60px 0 20px;
+      color: #DD7373;
+      font-weight: 600;
     }
 
-    /* first two items → take 2 columns each */
-    .photos .photo-wrapper:nth-child(-n+2){
-      grid-column:span 2;
+    .event-date {
+      font-size: 1.8rem; 
+      font-weight: bold;
     }
 
-    .photo-wrapper {
-      text-align: center; /* text under each photo */
+    .event-location {
+      color: inherit;        /* Remove blue */
+
+      font-size: 1.2rem;     
     }
 
-    .photos {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
+    .event-location:hover {
+      text-decoration: underline;  
+    }
+
+    .photo-row-large .photo-wrapper {
+      width: 40%;
+      min-width: 300px;
+    }
+    .photo-row-large {
+      display: flex;
+      justify-content: center;
       gap: 40px;
+      margin-bottom: 60px;
+      flex-wrap: wrap;
     }
 
-    .photos .photo-wrapper:nth-child(-n+2) {
-      grid-column: span 2;
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      justify-items: center;
+      gap: 40px;
     }
 
     .photo-wrapper {
@@ -85,17 +100,13 @@
       margin: 0 auto 10px;
     }
 
-    /* Second row  orange */
-    .photo-wrapper:nth-child(n+3):nth-child(-n+9) .photo {
+    .photo-grid .photo-wrapper .photo {
       border-color: var(--orange);
     }
 
-    .section-title {
-      font-size: 1.6rem;
-      margin: 60px 0 20px;
-      color: #DD7373;
-      text-align: center;
-      font-weight: 600;
+    .Codigo_de_conducta, .Sponsors {
+      color: #000000;
+      margin-bottom: 40px;
     }
 
     .contact {
@@ -104,32 +115,106 @@
       margin-bottom: 60px;
     }
 
+    footer {
+      text-align: center;
+      background-color: #327e45;
+      color: white;
+      padding: 20px;
+      margin-top: 40px;
+    }
+
+    footer a {
+      color: #F7E7CE;
+      text-decoration: underline;
+    }
+
     @media (max-width: 768px) {
-      .photos {
+      .photo-row-large {
+        flex-direction: column;
+        align-items: center;
+      }
+      .photo-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
       }
     }
 
     @media (max-width: 480px) {
-      .photos {
+      .photo-grid {
         grid-template-columns: 1fr;
       }
     }
-  </style>
-  
-</head>
 
+  #floating-logo {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    /* width: 72px;
+    height: 72px; */
+    z-index: 9999;
+    /* display: grid;
+    place-items: center;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    text-decoration: none; */
+  }
+  #floating-logo img {
+    width: 100px;
+    height: auto;
+    /* height: 60%; */
+    object-fit: contain;
+    transition: transform 0.2s ease;
+  }
+  #floating-logo:hover img { transform: rotate(3deg) scale(1.03); }
+
+  /* Respect users who prefer reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    #floating-logo, #floating-logo img { transition: none !important; }
+  }
+
+  /* Avoid overlapping bottom bars on mobile */
+  @supports (padding: max(0px)) {
+    #floating-logo { bottom: max(16px, env(safe-area-inset-bottom)); }
+  }
+
+
+
+
+
+
+  </style>
+
+</head>
 <body>
 
 <div class="container">
 
-    <img class="logo" src="bitmap.svg" alt="Logo">
+    <img class="logo" src="logo_loli.png" alt="Logo">
+
+    <h2 class="section-title">Ciencia joven, colaborativa y federal 🧪</h2>
 
     <p class="description">
         La<strong> Agrupación de Jóvenes Investigadores (AJI)</strong> es una organización sin fines de lucro que busca generar un espacio de charla, reflexión y discusión para
         estudiantes de doctorado, postdoctorado e investigadores jóvenes en Argentina, con un formato de reuniones anuales.
     </p>
+
+    <p class="description">
+        <span class="event-date"><strong>16 y 17 de Octubre 2025 en el Instituto Leloir</strong></span> <br>
+        <a class="event-location" href="https://maps.app.goo.gl/YkSo4RwhZQKanhueA" target="_blank" rel="noopener noreferrer">
+            Av. Patricias Argentinas 435, Ciudad Autónoma de Buenos Aires
+        </a>
+        <br>
+        <br>
+        <a class="event-location" href="https://docs.google.com/forms/d/e/1FAIpQLSfrn-Ay62YDFT1W4liZnXIJ0cTZPDr5O24-Wieaemc2Z2nRHQ/viewform" target="_blank" rel="noopener noreferrer">
+            Formulario de inscripción
+        </a>
+    
+    
+    
+    </p>
+
 
     <h2 class="section-title">Misión</h2>
 
@@ -138,34 +223,70 @@
         A diferencia de otros eventos académicos tradicionales, buscamos poner el énfasis no solo en la presentación de resultados científicos, sino también en el intercambio de técnicas experimentales, herramientas de trabajo, dificultades comunes y aprendizajes cotidianos que forman parte esencial del hacer ciencia.
     </p>
 
-    <p class="description">
-        ¡Pronto más información!
-    </p>
+
+
+<h2 class="section-title">Programa Tentativo y Oradores Destacados</h2>
+
+
+      <h3 class="section-title">🔬 Ejes temáticos del congreso</h3>
+      <ul class="description" style="list-style: none; padding: 0;">
+          <li><strong>Biología celular y molecular</strong></li>
+          <li><strong>Biología vegetal y Biotecnología</strong></li>
+          <li><strong>Bioinformatica y Biología Computacional</strong></li>
+          <li><strong>Biología del desarrollo y Neurociencias</strong></li>
+      </ul>
+
+      <h3 class="section-title">🧠 Oradores destacados</h3>
+      <ul class="description" style="list-style: none; padding: 0;">
+          <li><strong>Dr. Federico Ariel</strong> – Investigador independiente del CONICET, trabaja actualmente en el Instituto de Fisiología, Biología Molecular y Neurociencias (IFIBYNE).<br>
+          </li><br>
+          <li><strong>Dra. Daniela Di Bella</strong> – Doctora en Ciencias Biológicas, actualmente realiza su posdoctorado en el laboratorio de Paola Arlotta en la Harvard University.<br>
+          </li><br>
+          <li><strong>Dra. Lucía Chemes</strong> – Investigadora independiente del CONICET, trabaja en el Instituto de Investigaciones Biotecnológicas (IIB-UNSAM).<br>
+          </li>
+      </ul>
+
+      <h3 class="section-title">🌟 Invitado especial</h3>
+      <p class="description">
+          <strong>Dr. Alberto Kornblihtt</strong> – Investigador superior del CONICET, director del IFIBYNE (UBA-CONICET). Su trayectoria científica y su compromiso con la ciencia pública lo convierten en una referencia ineludible para toda la comunidad científica argentina.
+      </p>
+
+      <h3 class="section-title">📣 Panel especial – Comunicación pública de la ciencia</h3>
+      <p class="description">
+          El congreso contará además con una mesa redonda dedicada a los desafíos de la comunicación de la ciencia. Participará la reconocida periodista <strong>Nora Bär</strong>, el investigador y comunicador <strong> Dr. Pedro Bekinschtein</strong>, junto a otras figuras del ámbito de la divulgación que serán anunciadas próximamente.
+      </p>
+
+      <h3 class="section-title">🗓️ Formato general del evento</h3>
+      <ul class="description" style="list-style: none; padding: 0;">
+          <li>Charlas breves (10 minutos + 5 de preguntas) organizadas por eje temático</li>
+          <li>Conferencias magistrales de oradores/as invitados/as</li>
+          <li>Sesiones de pósters abiertas al intercambio entre pares</li>
+          <li>Mesas de discusión interdisciplinaria, incluyendo paneles especiales</li>
+          <li>Actividades sociales y recreativas orientadas a fortalecer la comunidad científica joven</li>
+      </ul>
       
 
-        <br>
-        <br>
         <br>
         <h2 class="section-title">Integrantes</h2>
         <br>
 
-    <div class="photos">
-
+    <div class="photo-row-large">
       <div class="photo-wrapper">
           <img class="photo" src="tpeters.jpeg" alt="Photo 1">
           <p class="description">Tomás Peters, presidente y co-fundador de la AJI, es Licenciado en Biotecnología y Biología Molecular de la UNLP,  becario doctoral CONICET, docente en la UNLP y estudiante de doctorado en Laboratorio de biología celular del ARN - FIL - UBA.</p>
       </div>
-
       <div class="photo-wrapper">
           <img class="photo" src="jmacdonagh.jpg" alt="Photo 2">
           <p class="description">Juan Mac Donagh, vicepresidente y co-fundador de la AJI, es Licenciado en Biotecnología y Biología Molecular de la UNLP, becario doctoral CONICET, docente en la UNLP y estudiante de doctorado en Structural Bioinformatics Group - UNQ.</p>
       </div>
+    </div>
 
+    <div class="photo-grid">
       <div class="photo-wrapper">
           <img class="photo" src="Joselina.jpeg" alt="Photo 3">
           <p class="description">Joselina Berti, miembro del comité científico de la AJI, es Licenciada en Biotecnología de UADE, becaria doctoral CONICET y estudiante de doctorado en el Laboratorio de Genética del Desarrollo Neural FIL - FCEN UBA.</p>
       </div>      
-      
+
       <div class="photo-wrapper">
           <img class="photo" src="Caterina.JPG" alt="Photo 4">
           <p class="description">Caterina Sister, miembro del comité científico de la AJI, es Licenciada en Biología de la Facultad de Ciencias Exactas y Naturales (UBA) y actualmente, becaria doctoral CONICET desarrollando sus estudios en el Laboratorio de Genética del Desarrollo Neural FIL - FCEN UBA.</p>
@@ -173,33 +294,30 @@
 
       <div class="photo-wrapper">
           <img class="photo" src="Fran.jpg" alt="Photo 5">
-          <p class="description">Francisco Corvetto Aristrain, miembro del comité científico de la AJI, es licenciado en Biología de la Facultad de Ciencias Exactas y Naturales (UBA) y actualmente, becario doctoral desarrollando sus estudios en el Laboratorio de Biología Celular del 
-          ARN - FCEN UBA.</p> 
+          <p class="description">Francisco Corvetto Aristrain, miembro del comité científico de la AJI, es licenciado en Biología de la Facultad de Ciencias Exactas y Naturales (UBA) y actualmente, becario doctoral desarrollando sus estudios en el Laboratorio de Biología Celular del ARN - FCEN UBA.</p> 
       </div>
 
       <div class="photo-wrapper">
-            <img class="photo" src="Gobbini.jpeg" alt="Photo 6">
-            <p class="description">Laura Gobbini, miembro del comité científico de la AJI, es Licenciada en Ciencias Biológicas de la Facultad de Ciencias Exactas y Naturales, UBA. Actualmente, estudiante de doctorado en el laboratorio de Biología Molecular de Plantas en la Fundación Instituto Leloir. </p> 
+          <img class="photo" src="Gobbini.jpeg" alt="Photo 6">
+          <p class="description">Laura Gobbini, miembro del comité científico de la AJI, es Licenciada en Ciencias Biológicas de la Facultad de Ciencias Exactas y Naturales, UBA. Actualmente, estudiante de doctorado en el laboratorio de Biología Molecular de Plantas en la Fundación Instituto Leloir. </p> 
       </div>
 
       <div class="photo-wrapper">
-            <img class="photo" src="VI_aji.jpeg" alt="Photo 7">
-            <p class="description">Virginia Ibarra, miembro del comité científico de la AJI, es Licenciada en Biotecnología egresada de la Universidad Nacional del Litoral (UNL). Actualmente, becaria doctoral CONICET y desarrolla su tesis en el Laboratorio de Biología Molecular de Plantas en la Fundación Instituto Leloir (FIL)/IIBBA-CONICET. </p> 
+          <img class="photo" src="VI_aji.jpeg" alt="Photo 7">
+          <p class="description">Virginia Ibarra, miembro del comité científico de la AJI, es Licenciada en Biotecnología egresada de la Universidad Nacional del Litoral (UNL). Actualmente, becaria doctoral CONICET y desarrolla su tesis en el Laboratorio de Biología Molecular de Plantas en la Fundación Instituto Leloir (FIL)/IIBBA-CONICET. </p> 
       </div>
 
-      
       <div class="photo-wrapper">
-            <img class="photo" src="wacu.jpeg" alt="Photo 8">
-            <p class="description">Facundo Sanchez Trapes, miembro del comité científico de la AJI, es licenciado en Biotecnología y Biología Molecular de la UNLP, becario Agencia en el Laboratorio de Estudio de Secreción - FCEN UBA y docente de la UNLP. </p> 
+          <img class="photo" src="wacu.jpeg" alt="Photo 8">
+          <p class="description">Facundo Sanchez Trapes, miembro del comité científico de la AJI, es licenciado en Biotecnología y Biología Molecular de la UNLP, becario Agencia en el Laboratorio de Estudio de Secreción - FCEN UBA y docente de la UNLP. </p> 
       </div>
-      
-      </div>
+    </div>
 
 
       <h2 class="section-title">Codigo de conducta</h2>
       <p class="Codigo_de_conducta">
         La AJI se respalda en un código de conducta con especial énfasis en el respeto y el respaldo mutuo: 
-        <a href="https://docs.google.com/document/d/1GZi98oojkXhOoQ0TF-7YWduQnxWehQCelQayEdQl4Oc/edit?usp=sharing"
+        <a class="event-location" href="https://docs.google.com/document/d/1GZi98oojkXhOoQ0TF-7YWduQnxWehQCelQayEdQl4Oc/edit?usp=sharing"
            target="_blank" rel="noopener noreferrer"> <br> disponible aquí</a>
       </p>
 
@@ -208,13 +326,12 @@
       <br>
       <h2 class="section-title">Financiamiento</h2>
       <p class="Sponsors">
-        !Pronto más información sobre nuestros sponsors! <br>
+        Ya contamos con algunos sponsors, pero todavía podes sumarte!<br>
         Si deseas colaborar con la AJI, no dudes en contactarnos. <br>
         La AJI es una organización sin fines de lucro y no cuenta con financiamiento interno. <br>
       </p>
       
-      <br>
-      <br>
+
       <br>
       <h2 class="section-title">Redes y contacto</h2>
       <p class="contact">
@@ -224,24 +341,64 @@
     <footer>
   
     <p>Seguinos en redes: <a href="https://www.instagram.com/aji_argentina/">Instagram</a> | <a href="#">X</a></p>
+    <p>Logo diseñado por <a href="https://www.instagram.com/_lolisima/" target="_blank" rel="noopener noreferrer">Loli 🧪</a></p>           
   </footer>
 
 
     </div>
-</body>
+
+  <a href="https://docs.google.com/forms/d/e/1FAIpQLSfrn-Ay62YDFT1W4liZnXIJ0cTZPDr5O24-Wieaemc2Z2nRHQ/viewform"
+    id="floating-logo"
+    aria-label="Formulario de inscripción"
+    target="_blank"
+    rel="noopener noreferrer">
+    <img src="logo_loli.png" alt="AJI logo">
+  </a>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const cards = document.querySelectorAll('.photo-wrapper');
-      
       const io = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-          if (e.isIntersecting) e.target.classList.add('show');
-        });
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
       }, { threshold: 0.3 });
-      
       cards.forEach(c => io.observe(c));
     });
+  </script>
+
+  <script>
+    (function () {
+      // Respect reduced motion
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      function init() {
+        const img = document.querySelector('#floating-logo img');
+        if (!img) return;
+        const maxRotate = 720; // total degrees by page bottom
+        let ticking = false;
+
+        function onScroll() {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(() => {
+            const doc = document.documentElement;
+            const maxScroll = Math.max(1, doc.scrollHeight - window.innerHeight);
+            const progress = Math.min(1, window.scrollY / maxScroll);
+            img.style.rotate = (progress * maxRotate) + 'deg';
+            ticking = false;
+          });
+        }
+
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
+      }
+
+      // Ensure the logo exists before running
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
   </script>
 </body>
 </html>
