@@ -2,8 +2,13 @@
 <html>
 <head>
   <meta charset="UTF-8">
+
   <title>Asociacion de Jovenes Investigadores</title>
   <link rel="icon" href="logo_loli.png" type="image/png">
+
+  <title>Agrupación de Jovenes Investigadores</title>
+  <link rel="icon" href="bitmap.png" type="image/png">
+
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 
@@ -12,6 +17,7 @@
       :root {
       --green: #327e45;
       --orange: #ef770d;
+      --navy_blue: #4881bb;
     }
 
     body {
@@ -180,9 +186,93 @@
   }
 
 
+  #floating-logo img {
+    animation: pulse 4s ease-in-out infinite;
+  }
 
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); } /* 8% bigger at peak */
+  }
 
+  @keyframes logoPop {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.2); }
+    65%  { transform: scale(1.4); }
+    80%  { transform: scale(1.15); }
+    100% { transform: scale(1); }
+  }
 
+  #big-logo.pop {
+    animation: logoPop 0.57s cubic-bezier(.68,-0.55,.27,1.55);
+  }
+
+    /* Featured speakers */
+  .speakers-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 28px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  }
+
+  .speaker {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    text-align: left;               /* text aligns nicely next to the photo */
+    padding: 12px 14px;
+    border-radius: 16px;
+    background: rgba(230, 230, 225, 0.85);    
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .speaker:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.1);
+  }
+
+  .speaker-avatar {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--navy_blue); /* matches your grid photos */
+    flex: 0 0 auto;
+  }
+
+  .speaker-avatar[src*="lchemes.jpg"] {
+    object-position: 80% 75%; /* 40% horizontal, 35% vertical */
+  }
+  .speaker-text a {
+    color: inherit;            /* same as normal text */
+    text-decoration: none;     /* remove underline */
+  }
+  .speaker-text a:hover {
+    text-decoration: underline; /* subtle hover cue */
+  }
+  .speaker-text strong {
+    display: inline-block;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  @media (max-width: 420px) {
+    .speaker { flex-direction: column; text-align: center; }
+  }
+
+  .speaker-centered {
+    flex-direction: column;
+    text-align: center;
+    max-width: 600px; /* optional: keeps it from stretching too wide */
+    margin: 0 auto;   /* centers horizontally in its container */
+  }
+
+  .speaker-centered .speaker-avatar {
+    margin-bottom: 12px;
+  }
 
   </style>
 
@@ -191,7 +281,7 @@
 
 <div class="container">
 
-    <img class="logo" src="logo_loli.png" alt="Logo">
+    <img class="logo" src="logo_loli.png" alt="Logo" id="big-logo">
 
     <h2 class="section-title">Ciencia joven, colaborativa y federal 🧪</h2>
 
@@ -225,7 +315,7 @@
 
 
 
-<h2 class="section-title">Programa Tentativo y Oradores Destacados</h2>
+    <h2 class="section-title">Ejes temáticos del congreso y Oradores Destacados:</h2>
 
 
       <h3 class="section-title">🔬 Ejes temáticos del congreso</h3>
@@ -236,20 +326,60 @@
           <li><strong>Biología del desarrollo y Neurociencias</strong></li>
       </ul>
 
-      <h3 class="section-title">🧠 Oradores destacados</h3>
-      <ul class="description" style="list-style: none; padding: 0;">
-          <li><strong>Dr. Federico Ariel</strong> – Investigador independiente del CONICET, trabaja actualmente en el Instituto de Fisiología, Biología Molecular y Neurociencias (IFIBYNE).<br>
-          </li><br>
-          <li><strong>Dra. Daniela Di Bella</strong> – Doctora en Ciencias Biológicas, actualmente realiza su posdoctorado en el laboratorio de Paola Arlotta en la Harvard University.<br>
-          </li><br>
-          <li><strong>Dra. Lucía Chemes</strong> – Investigadora independiente del CONICET, trabaja en el Instituto de Investigaciones Biotecnológicas (IIB-UNSAM).<br>
-          </li>
-      </ul>
+    <h3 class="section-title">🧠 Oradores destacados</h3>
+    <ul class="speakers-list">
+
+
+      <li class="speaker">
+        <img class="speaker-avatar" src="fariel.jpg" alt="Dr. Federico Ariel" loading="lazy">
+        <div class="speaker-text">
+          <strong>
+          <a href="https://ifibyne.exactas.uba.ar/grupo-ariel/" target="_blank" rel="noopener noreferrer">
+          Dr. Federico Ariel
+          </a>
+          </strong><br>
+          Investigador independiente del CONICET, trabaja actualmente en el Instituto de Fisiología, Biología Molecular y Neurociencias (IFIBYNE-UBA).
+        </div>
+      </li>
+
+      <li class="speaker">
+        <img class="speaker-avatar" src="lchemes.jpg" alt="Dra. Lucía Chemes" loading="lazy">
+        <div class="speaker-text">
+          <strong>
+          <a href="https://investigadores.unsam.edu.ar/eng/investigador/364/Chemes-Lucia-Beatriz-" target="_blank" rel="noopener noreferrer">
+          Dra. Lucía Chemes
+          </a>
+          </strong><br>
+          Investigadora independiente del CONICET, trabaja actualmente en el Instituto de Investigaciones Biotecnológicas (IIB-UNSAM).
+        </div>
+      </li>
+      
+      <li class="speaker">
+        <img class="speaker-avatar" src="ddibella.jpg" alt="Dra. Daniela Di Bella" loading="lazy">
+        <div class="speaker-text">
+          <strong>
+          <a href="https://brain.harvard.edu/hbi_connectome/daniela-di-bella/" target="_blank" rel="noopener noreferrer">
+          Dra. Daniela Di Bella
+          </a>
+          </strong><br>
+          Doctora en Ciencias Biológicas, actualmente realiza su posdoctorado en el laboratorio de Paola Arlotta en Harvard University.
+        </div>
+      </li>
+    </ul>
 
       <h3 class="section-title">🌟 Invitado especial</h3>
-      <p class="description">
-          <strong>Dr. Alberto Kornblihtt</strong> – Investigador superior del CONICET, director del IFIBYNE (UBA-CONICET). Su trayectoria científica y su compromiso con la ciencia pública lo convierten en una referencia ineludible para toda la comunidad científica argentina.
-      </p>
+      <div class="speaker speaker-centered">
+        <img class="speaker-avatar" src="bkrom.jpg" alt="Dr. Alberto Kornblihtt" loading="lazy">
+        <div class="speaker-text">
+          <strong>
+            <a href="http://ark.fbmc.fcen.uba.ar/home_eng.php" target="_blank" rel="noopener noreferrer">
+              Dr. Alberto Kornblihtt
+            </a>
+          </strong><br>
+          Investigador superior del CONICET, director del IFIBYNE (UBA-CONICET). 
+          Su trayectoria científica y su compromiso con la ciencia pública lo convierten en una referencia ineludible para toda la comunidad científica argentina.
+        </div>
+      </div>
 
       <h3 class="section-title">📣 Panel especial – Comunicación pública de la ciencia</h3>
       <p class="description">
@@ -399,6 +529,27 @@
         init();
       }
     })();
+  
   </script>
+
+
+  <audio id="logo-sound" src="mate.wav" preload="auto"></audio>
+
+  <script>
+    const bigLogo = document.getElementById('big-logo');
+    const sound = document.getElementById('logo-sound');
+
+    bigLogo.addEventListener('click', () => {
+      // Play sound
+      sound.currentTime = 0;
+      sound.play();
+
+      // Trigger pop animation
+      bigLogo.classList.remove('pop'); // reset if it’s still there
+      void bigLogo.offsetWidth;        // force reflow so animation restarts
+      bigLogo.classList.add('pop');
+    });
+  </script>
+
 </body>
 </html>
