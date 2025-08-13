@@ -273,7 +273,34 @@
   .speaker-centered .speaker-avatar {
     margin-bottom: 12px;
   }
+  .tictactoe .ttt-wrap{
+    max-width: 420px;
+    margin: 0 auto;
+    background: rgba(230,230,225,0.95);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+  }
+  .tictactoe .ttt-status{ margin-bottom: 12px; font-weight: 600; color:#003049; }
+  .tictactoe .ttt-board{ display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; }
+  .tictactoe .cell{
+    aspect-ratio:1/1; font-size: clamp(28px, 6vw, 44px); font-weight:700;
+    border-radius:14px; border:3px solid var(--green); background:#fff; cursor:pointer;
+    transition: transform .08s ease, box-shadow .08s ease, background .2s ease;
+  }
+  .tictactoe .cell:hover{ transform: translateY(-1px); box-shadow:0 6px 14px rgba(0,0,0,0.08); }
+  .tictactoe .cell:disabled{ cursor: default; background:#f3f3f3; }
+  .tictactoe .cell.win{ background: #d9f7e6; border-color: #006d77; }
+  .tictactoe .ttt-reset{
+    margin-top:14px; width:100%; padding:10px 12px; border-radius:12px; border:0;
+    background: var(--green); color:#fff; font-weight:700; cursor:pointer;
+  }
+  .tictactoe .ttt-reset:hover{ filter: brightness(1.05); }
 
+  .tictactoe .cell img {
+  display: block;
+  margin: 0 auto;
+}
   </style>
 
 </head>
@@ -300,8 +327,6 @@
         <a class="event-location" href="https://docs.google.com/forms/d/e/1FAIpQLSfrn-Ay62YDFT1W4liZnXIJ0cTZPDr5O24-Wieaemc2Z2nRHQ/viewform" target="_blank" rel="noopener noreferrer">
             Formulario de inscripción
         </a>
-    
-    
     
     </p>
 
@@ -470,9 +495,28 @@
 
     <footer>
   
-    <p>Seguinos en redes: <a href="https://www.instagram.com/aji_argentina/">Instagram</a> | <a href="#">X</a></p>
+    <p>Seguinos en redes: <a href="https://www.instagram.com/aji_argentina/">Instagram</a> | <a id="play-ttt" target="_blank" rel="noopener noreferrer">X</a></p>
     <p>Logo diseñado por <a href="https://www.instagram.com/_lolisima/" target="_blank" rel="noopener noreferrer">Loli 🧪</a></p>           
   </footer>
+          <!-- Hidden Tic Tac Toe -->
+      <section class="tictactoe container" id="ttt-section" style="display:none;">
+        <h3 class="section-title">Tic-Tac-Toe</h3>
+        <div class="ttt-wrap">
+          <div class="ttt-status" aria-live="polite">Turno: <strong>X</strong></div>
+          <div class="ttt-board" role="grid" aria-label="Tic Tac Toe">
+            <button class="cell" data-i="0" role="gridcell"></button>
+            <button class="cell" data-i="1" role="gridcell"></button>
+            <button class="cell" data-i="2" role="gridcell"></button>
+            <button class="cell" data-i="3" role="gridcell"></button>
+            <button class="cell" data-i="4" role="gridcell"></button>
+            <button class="cell" data-i="5" role="gridcell"></button>
+            <button class="cell" data-i="6" role="gridcell"></button>
+            <button class="cell" data-i="7" role="gridcell"></button>
+            <button class="cell" data-i="8" role="gridcell"></button>
+          </div>
+          <button class="ttt-reset">Reiniciar</button>
+        </div>
+      </section>
 
 
     </div>
@@ -550,6 +594,121 @@
       bigLogo.classList.add('pop');
     });
   </script>
+<script>
+
+  
+(function(){
+  const trigger = document.getElementById('play-ttt');
+  const section = document.getElementById('ttt-section');
+  let initialized = false;
+
+  if (!trigger || !section) return;
+
+  trigger.addEventListener('click', () => {
+    // Show (or toggle) the game
+    section.style.display = section.style.display === 'none' ? 'block' : 'none';
+    if (section.style.display === 'none') return;
+
+    if (!initialized) {
+      initTTT();
+      initialized = true;
+    }
+    // Scroll to it for convenience
+    section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+
+  function initTTT(){
+  const boardEl = section.querySelector('.ttt-board');
+  const cells = Array.from(boardEl.querySelectorAll('.cell'));
+  const statusEl = section.querySelector('.ttt-status strong');
+  const resetBtn = section.querySelector('.ttt-reset');
+
+  let board = Array(9).fill('');
+  let xTurn = true;
+  let gameOver = false;
+  const wins = [
+    [0,1,2],[3,4,5],[6,7,8],
+    [0,3,6],[1,4,7],[2,5,8],
+    [0,4,8],[2,4,6]
+  ];
+
+  function iconHTML(mark, size=24){
+    const src = mark === 'X' ? 'bepper.png' : 'repper.png';
+    const alt = mark === 'X' ? 'Bepper' : 'Repper';
+    return `<img src="${src}" alt="${alt}" style="width:${size}px;height:${size}px;vertical-align:middle;object-fit:contain;">`;
+  }
+
+  function setStatus(mark){
+    if (mark === 'X' || mark === 'O') {
+      statusEl.innerHTML = iconHTML(mark, 24);
+    } else {
+      statusEl.textContent = mark; // e.g., "Empate"
+    }
+  }
+
+  function checkWinner(){
+    for (const [a,b,c] of wins){
+      if (board[a] && board[a]===board[b] && board[a]===board[c]){
+        [a,b,c].forEach(i=>cells[i].classList.add('win'));
+        return board[a]; // 'X' or 'O'
+      }
+    }
+    return board.every(v=>v) ? 'draw' : null;
+  }
+
+  function handleClick(e){
+    const i = +e.currentTarget.dataset.i;
+    if (gameOver || board[i]) return;
+
+    const mark = xTurn ? 'X' : 'O';
+    board[i] = mark;
+
+    // put the image in the cell
+    e.currentTarget.textContent = '';
+    const img = document.createElement('img');
+    img.src = mark === 'X' ? 'bepper.png' : 'repper.png';
+    img.alt = mark === 'X' ? 'Bepper' : 'Repper';
+    img.style.width = '70%';
+    img.style.height = '70%';
+    img.style.objectFit = 'contain';
+    e.currentTarget.appendChild(img);
+    e.currentTarget.disabled = true;
+
+    const result = checkWinner();
+    if (result === 'draw'){
+      setStatus('Empate');
+      gameOver = true;
+      return;
+    } else if (result){
+      statusEl.innerHTML = `Ganó ${iconHTML(result, 24)}`;
+      gameOver = true;
+      cells.forEach(c=>c.disabled = true);
+      return;
+    }
+
+    xTurn = !xTurn;
+    setStatus(xTurn ? 'X' : 'O');
+  }
+
+  function reset(){
+    board.fill('');
+    xTurn = true; gameOver = false;
+    cells.forEach(c=>{
+      c.textContent=''; 
+      c.disabled=false; 
+      c.classList.remove('win');
+    });
+    setStatus('X');
+  }
+
+  cells.forEach(c=>c.addEventListener('click', handleClick));
+  resetBtn.addEventListener('click', reset);
+  reset();
+}
+
+})();
+</script>
+
 
 </body>
 </html>
