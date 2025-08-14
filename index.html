@@ -624,81 +624,139 @@
   const resetBtn = section.querySelector('.ttt-reset');
 
   let board = Array(9).fill('');
-  let xTurn = true;
+  const human = 'X';   // you (bepper.jpeg)
+  const ai = 'O';      // computer (repper.jpeg)
   let gameOver = false;
+  let aiThinking = false;
+
   const wins = [
-    [0,1,2],[3,4,5],[6,7,8],
-    [0,3,6],[1,4,7],[2,5,8],
-    [0,4,8],[2,4,6]
+    [0,1,2],[3,4,5],[6,7,8], // rows
+    [0,3,6],[1,4,7],[2,5,8], // cols
+    [0,4,8],[2,4,6]          // diags
   ];
 
   function iconHTML(mark, size=24){
-    const src = mark === 'X' ? 'bepper.png' : 'repper.png';
-    const alt = mark === 'X' ? 'Bepper' : 'Repper';
+    const src = mark === 'X' ? 'repper.png' : 'bepper.png';
+    const alt = mark === 'X' ? 'Repper' : 'Bepper';
     return `<img src="${src}" alt="${alt}" style="width:${size}px;height:${size}px;vertical-align:middle;object-fit:contain;">`;
   }
-
   function setStatus(mark){
-    if (mark === 'X' || mark === 'O') {
-      statusEl.innerHTML = iconHTML(mark, 24);
-    } else {
-      statusEl.textContent = mark; // e.g., "Empate"
-    }
+    if (mark === 'X' || mark === 'O') statusEl.innerHTML = iconHTML(mark, 24);
+    else statusEl.textContent = mark;
   }
-
-  function checkWinner(){
-    for (const [a,b,c] of wins){
-      if (board[a] && board[a]===board[b] && board[a]===board[c]){
-        [a,b,c].forEach(i=>cells[i].classList.add('win'));
-        return board[a]; // 'X' or 'O'
+  function winner(b){
+    for (const [a,b2,c] of wins){
+      if (b[a] && b[a]===b[b2] && b[a]===b[c]) return b[a];
+    }
+    return b.every(v=>v) ? 'draw' : null;
+  }
+  function highlightWin(b){
+    for (const [a,b2,c] of wins){
+      if (b[a] && b[a]===b[b2] && b[a]===b[c]){
+        [a,b2,c].forEach(i=>cells[i].classList.add('win'));
+        break;
       }
     }
-    return board.every(v=>v) ? 'draw' : null;
+  }
+  function paintCell(i, mark){
+    const cell = cells[i];
+    cell.textContent = '';
+    const img = document.createElement('img');
+    img.src = mark === 'X' ? 'repper.png' : 'bepper.png';
+    img.alt = mark === 'X' ? 'Repper' : 'Bepper';
+    img.style.width = '70%';
+    img.style.height = '70%';
+    img.style.objectFit = 'contain';
+    cell.appendChild(img);
+    cell.disabled = true;
+  }
+
+  // ------ Beat-able AI: win > block > center > corner > random ------
+  function findWinningMove(b, mark){
+    for (const [a,b2,c] of wins){
+      const line = [b[a], b[b2], b[c]];
+      const emptyIdx = [a,b2,c].find(i => !b[i]);
+      // two of mark + one empty
+      if (emptyIdx !== undefined){
+        const countMark = line.filter(v => v === mark).length;
+        const countEmpty = line.filter(v => !v).length;
+        if (countMark === 2 && countEmpty === 1) return emptyIdx;
+      }
+    }
+    return null;
+  }
+
+  function aiPickMove(){
+    // 1) Try to win
+    let move = findWinningMove(board, ai);
+    if (move !== null) return move;
+
+    // 2) Block human win
+    move = findWinningMove(board, human);
+    if (move !== null) return move;
+
+    // 3) Take center
+    if (!board[4]) return 4;
+
+    // 4) Take a corner
+    const corners = [0,2,6,8].filter(i => !board[i]);
+    if (corners.length) return corners[Math.floor(Math.random()*corners.length)];
+
+    // 5) Any side
+    const sides = [1,3,5,7].filter(i => !board[i]);
+    if (sides.length) return sides[Math.floor(Math.random()*sides.length)];
+
+    return null; // no moves (shouldn’t happen)
+  }
+  // ------------------------------------------------------------------
+
+  function aiMove(){
+    aiThinking = true;
+    setTimeout(() => {
+      const i = aiPickMove();
+      if (i === null) { aiThinking = false; return; }
+      board[i] = ai;
+      paintCell(i, ai);
+
+      const w = winner(board);
+      if (w){
+        gameOver = true;
+        if (w === 'draw') setStatus('Empate');
+        else { statusEl.innerHTML = `Ganó ${iconHTML(w,24)}`; highlightWin(board); }
+        cells.forEach(c=>c.disabled = true);
+      } else {
+        setStatus(human); // your turn
+      }
+      aiThinking = false;
+    }, 350); // small delay for “thinking” feel
   }
 
   function handleClick(e){
     const i = +e.currentTarget.dataset.i;
-    if (gameOver || board[i]) return;
+    if (gameOver || board[i] || aiThinking) return;
 
-    const mark = xTurn ? 'X' : 'O';
-    board[i] = mark;
+    // Human move
+    board[i] = human;
+    paintCell(i, human);
 
-    // put the image in the cell
-    e.currentTarget.textContent = '';
-    const img = document.createElement('img');
-    img.src = mark === 'X' ? 'bepper.png' : 'repper.png';
-    img.alt = mark === 'X' ? 'Bepper' : 'Repper';
-    img.style.width = '70%';
-    img.style.height = '70%';
-    img.style.objectFit = 'contain';
-    e.currentTarget.appendChild(img);
-    e.currentTarget.disabled = true;
-
-    const result = checkWinner();
-    if (result === 'draw'){
-      setStatus('Empate');
+    let w = winner(board);
+    if (w){
       gameOver = true;
-      return;
-    } else if (result){
-      statusEl.innerHTML = `Ganó ${iconHTML(result, 24)}`;
-      gameOver = true;
+      if (w === 'draw') setStatus('Empate');
+      else { statusEl.innerHTML = `Ganó ${iconHTML(w,24)}`; highlightWin(board); }
       cells.forEach(c=>c.disabled = true);
       return;
     }
 
-    xTurn = !xTurn;
-    setStatus(xTurn ? 'X' : 'O');
+    // AI turn
+    setStatus(ai);
+    aiMove();
   }
 
   function reset(){
-    board.fill('');
-    xTurn = true; gameOver = false;
-    cells.forEach(c=>{
-      c.textContent=''; 
-      c.disabled=false; 
-      c.classList.remove('win');
-    });
-    setStatus('X');
+    board.fill(''); gameOver = false; aiThinking = false;
+    cells.forEach(c=>{ c.textContent=''; c.disabled=false; c.classList.remove('win'); });
+    setStatus(human);
   }
 
   cells.forEach(c=>c.addEventListener('click', handleClick));
